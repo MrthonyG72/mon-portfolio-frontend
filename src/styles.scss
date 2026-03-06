@@ -1,0 +1,63 @@
+/* Global styles - Portfolio */
+:root {
+  --color-bg: #ffffff;
+  --color-bg-alt: #f8fafc;
+  --color-text: #0f172a;
+  --color-text-muted: #64748b;
+  --color-primary: #6366f1;
+  --color-border: #e2e8f0;
+}
+
+.dark-theme {
+  --color-bg: #0f172a;
+  --color-bg-alt: #1e293b;
+  --color-text: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-primary: #a5b4fc;
+  --color-border: rgba(255, 255, 255, 0.08);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Overrides de lisibilité pour la section À propos (template Unfold) */
+
+#about-section {
+  background: #f9fafb;
+}
+
+.dark-theme #about-section {
+  background: #020617;
+}
+
+#about-section .heading-h3,
+#about-section .lead,
+#about-section p,
+#about-section a {
+  color: #0f172a;
+}
+
+.dark-theme #about-section .heading-h3,
+.dark-theme #about-section .lead,
+.dark-theme #about-section p,
+.dark-theme #about-section a {
+  color: #e5e7eb;
+}
+
