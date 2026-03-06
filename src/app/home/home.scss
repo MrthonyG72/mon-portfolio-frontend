@@ -249,6 +249,44 @@
   }
 }
 
+/* Skill progress bars */
+.skill-item {
+  margin-bottom: 0.5rem;
+}
+
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.skill-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.skill-percent {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.skill-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.skill-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #818cf8);
+  border-radius: 5px;
+  transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
 .about-links {
   display: flex;
   flex-wrap: wrap;
@@ -271,103 +309,88 @@
   gap: 1.5rem;
 }
 
+/* Nouvelles cartes de projet avec animations */
 .project-card {
-  background: #fff;
-  border-radius: 14px;
+  background: #111;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-  transition: transform 0.25s, box-shadow 0.25s;
-  animation: fadeUp 0.5s ease-out backwards;
+  border: 1px solid #222;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  height: 100%;
+  animation: fadeUp 0.5s ease-out backwards; /* J'ai conservé l'animation d'apparition au chargement */
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
-  }
-
-  .dark-theme & {
-    background: #1e293b;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-
-    &:hover {
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+    transform: translateY(-10px);
+    border-color: #007bff;
+    box-shadow: 0 15px 30px rgba(0, 123, 255, 0.2);
+    
+    .project-img {
+      transform: scale(1.08);
     }
   }
-}
 
-.project-image-wrap {
-  aspect-ratio: 16/10;
-  background: #e2e8f0;
-
-  .dark-theme & {
-    background: #334155;
-  }
-}
-
-.project-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-
-  &.placeholder {
+  .project-image-wrapper {
+    width: 100%;
+    height: 400px;
+    background: #000;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #94a3b8;
+    overflow: hidden;
+    
+    .project-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; // Garde l'image entière sans la couper
+      padding: 20px;
+      transition: transform 0.5s ease;
+      
+      &.placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #94a3b8;
+      }
+    }
   }
-}
 
-.project-body {
-  padding: 1.25rem;
-}
+  .project-content {
+    padding: 25px;
+    text-align: center;
+    
+    h3 {
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
 
-.project-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 0.5rem;
+    .tech-badge {
+      display: inline-block;
+      background: rgba(0, 123, 255, 0.1);
+      color: #007bff;
+      padding: 5px 14px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      margin: 4px;
+      border: 1px solid rgba(0, 123, 255, 0.3);
+      font-weight: 500;
+    }
 
-  .dark-theme & {
-    color: #f1f5f9;
+    .project-link {
+      color: #007bff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
-}
-
-.project-desc {
-  font-size: 0.9rem;
-  color: #64748b;
-  line-height: 1.55;
-  margin: 0 0 0.75rem;
-
-  .dark-theme & {
-    color: #94a3b8;
-  }
-}
-
-.project-tech {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 0.75rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  font-size: 0.8rem;
-  color: #6366f1;
-
-  .dark-theme & {
-    color: #a5b4fc;
-  }
-}
-
-.project-link {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #6366f1;
-  text-decoration: none;
-}
-
-.project-link:hover {
-  text-decoration: underline;
 }
 
 .empty-state {

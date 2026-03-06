@@ -1,5 +1,4 @@
 <div class="unslate_co--site-inner">
-  <!-- Hero Unfold -->
   <div
     class="cover-v1 jarallax"
     style="background-image: url('assets/portfolio-template/unfold-master/images/cover_bg_2.jpg');"
@@ -22,61 +21,57 @@
     </a>
   </div>
 
-  <!-- Portfolio -->
-  <div class="unslate_co--section" id="portfolio-section">
-    <div class="container">
-      <div class="section-heading-wrap text-center mb-5">
-        <h2 class="heading-h2 text-center divider">
-          <span class="gsap-reveal">Portfolio</span>
-        </h2>
-      </div>
+  <section class="portfolio" id="portfolio" style="padding: 80px 0; background-color: #000; overflow: hidden;">
+  <div class="container">
+    
+    <div class="section-title mb-5 text-center" data-aos="fade-up">
+      <h2 class="text_background">
+        My Projects
+        <span class="heading_background">Portfolio</span>
+      </h2>
+    </div>
 
-      <div class="portfolio-wrapper">
-        @if (projects().length) {
-          <div id="posts" class="row gutter-isotope-item">
-            @for (project of projects(); track project.id) {
-              <div class="item web col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
-                <div class="portfolio-item isotope-item gsap-reveal-img">
-                  <div class="overlay">
-                    <span class="wrap-icon icon-link2"></span>
-                    <div class="portfolio-item-content">
-                      <h3>{{ project.title }}</h3>
-                      <p>
-                        @if (getTechnologies(project).length) {
-                          {{ getTechnologies(project).join(', ') }}
-                        } @else {
-                          Projet
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  @if (project.image) {
-                    <img
-                      [src]="project.image"
-                      class="lazyload img-fluid"
-                      [alt]="project.title"
-                    />
-                  } @else {
-                    <img
-                      src="assets/portfolio-template/unfold-master/images/work_1_md.jpg"
-                      class="lazyload img-fluid"
-                      alt="Projet"
-                    />
+    <div class="row">
+      @for (project of projects(); track project.id; let i = $index) {
+        <div class="col-lg-6 col-md-6 mb-5" data-aos="fade-up" [attr.data-aos-delay]="i * 100">
+          
+          <div class="project-card">
+            
+            <div class="project-image-wrapper">
+              <img [src]="getProjectImageUrl(project)" 
+                   alt="{{ project.title }}"
+                   class="project-img">
+            </div>
+            
+            <div class="project-content">
+              <h3>{{ project.title }}</h3>
+              
+              <div class="tech-container">
+                @if (getTechnologies(project).length) {
+                  @for (tech of getTechnologies(project); track tech) {
+                    <span class="tech-badge">{{ tech }}</span>
                   }
-                </div>
+                } @else {
+                  <span class="tech-badge">Développement</span>
+                }
               </div>
-            }
+
+              @if (project.link) {
+                <div class="mt-4">
+                  <a [href]="project.link" target="_blank" class="project-link">
+                    Voir le projet <i class="fas fa-external-link-alt ml-2"></i>
+                  </a>
+                </div>
+              }
+            </div>
+
           </div>
-        } @else {
-          <p class="text-center text-muted">
-            Aucun projet pour le moment. Ajoutez-en depuis l’admin Django.
-          </p>
-        }
-      </div>
+        </div>
+      }
     </div>
   </div>
+</section>
 
-  <!-- About -->
   <div class="unslate_co--section" id="about-section">
     <div class="container">
       <div class="section-heading-wrap text-center mb-5">
@@ -94,17 +89,25 @@
 
       <div class="row mt-5 justify-content-between">
         <div class="col-lg-7 mb-5 mb-lg-0">
-          <figure class="dotted-bg gsap-reveal-img">
-            <img
-              src="assets/portfolio-template/unfold-master/images/about_me_pic2.jpg"
-              alt="À propos"
-              class="img-fluid"
-            />
+          <figure class="dotted-bg gsap-reveal-img" data-aos="fade-right">
+            @if (photoUrl()) {
+              <img
+                [src]="photoUrl()"
+                alt="À propos"
+                class="img-fluid"
+              />
+            } @else {
+              <img
+                src="assets/portfolio-template/unfold-master/images/about_me_pic2.jpg"
+                alt="À propos"
+                class="img-fluid"
+              />
+            }
           </figure>
         </div>
-        <div class="col-lg-4 pr-lg-5">
+        <div class="col-lg-4 pr-lg-5" data-aos="fade-left" data-aos-delay="200">
           <h3 class="mb-4 heading-h3">
-            <span class="gsap-reveal">Anzouan Gomis Thony Axel</span>
+            <span class="gsap-reveal">{{ profile().full_name }}</span>
           </h3>
           <p class="lead gsap-reveal">{{ profile().about_me }}</p>
           <p class="mb-3 gsap-reveal">
@@ -117,14 +120,6 @@
               <a [href]="'tel:' + profile().phone">{{ profile().phone }}</a>
             </p>
           }
-          <div class="gsap-reveal mb-3">
-            <strong>Compétences :</strong>
-            <ul class="mt-2">
-              @for (skill of skillsDisplay(); track skill) {
-                <li>{{ skill }}</li>
-              }
-            </ul>
-          </div>
           <p class="gsap-reveal">
             @if (profile().github_url) {
               <a
@@ -150,7 +145,119 @@
     </div>
   </div>
 
-  <!-- Contact -->
+  <div class="unslate_co--section section-counter" id="skills-section">
+    <div class="container">
+      <div class="section-heading-wrap text-center mb-5">
+        <h2 class="heading-h2 text-center divider">
+          <span class="gsap-reveal">Mes Compétences</span>
+        </h2>
+        <span class="gsap-reveal">
+          <img
+            src="assets/portfolio-template/unfold-master/images/divider.png"
+            alt="divider"
+            width="76"
+          />
+        </span>
+      </div>
+
+      @if (skills().length) {
+        <div class="row pt-5">
+          @for (skill of skills(); track skill.id; let i = $index) {
+            <div
+              class="col-12 col-sm-6 col-lg-4 mb-4"
+              data-aos="fade-up"
+              [attr.data-aos-delay]="i * 100"
+            >
+              <div class="skill-item gsap-reveal">
+                <div class="skill-header">
+                  <span class="skill-name">{{ skill.name }}</span>
+                  <span class="skill-percent">{{ skill.percentage }}%</span>
+                </div>
+                <div class="skill-bar">
+                  <div
+                    class="skill-bar-fill"
+                    [style.width.%]="skill.percentage"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="text-center text-muted">
+          Aucune compétence pour le moment. Ajoutez-en depuis l'admin Django.
+        </p>
+      }
+    </div>
+  </div>
+
+  <div class="unslate_co--section" id="services-section">
+    <div class="container">
+      <div class="section-heading-wrap text-center mb-5">
+        <h2 class="heading-h2 text-center divider">
+          <span class="gsap-reveal">Mes Services</span>
+        </h2>
+        <span class="gsap-reveal">
+          <img
+            src="assets/portfolio-template/unfold-master/images/divider.png"
+            alt="divider"
+            width="76"
+          />
+        </span>
+      </div>
+
+      <div class="row">
+        @for (svc of services(); track svc.id) {
+          <div class="col-sm-6 col-md-6 col-lg-4 mb-4" data-aos="fade-up" [attr.data-aos-delay]="$index * 100">
+            <div class="media-v1">
+              <div class="icon-wrap">
+                @if (svc.icon) {
+                  <img [src]="svc.icon" alt="" width="48" height="48" style="object-fit:contain;" />
+                } @else if (svc.icon_class) {
+                  <span [class]="svc.icon_class"></span>
+                } @else {
+                  <span class="icon-laptop2"></span>
+                }
+              </div>
+              <div class="body-wrap">
+                <h3>{{ svc.name }}</h3>
+                <p>{{ svc.details }}</p>
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="col-sm-6 col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="media-v1">
+              <div class="icon-wrap"><span class="icon-laptop2"></span></div>
+              <div class="body-wrap">
+                <h3>Développement Web</h3>
+                <p>Création d'applications web modernes avec Angular, Django et d'autres technologies full-stack.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="media-v1">
+              <div class="icon-wrap"><span class="icon-phone2"></span></div>
+              <div class="body-wrap">
+                <h3>Développement Mobile</h3>
+                <p>Conception d'applications mobiles performantes avec Flutter pour Android et iOS.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="media-v1">
+              <div class="icon-wrap"><span class="icon-lightbulb"></span></div>
+              <div class="body-wrap">
+                <h3>Conception &amp; Innovation</h3>
+                <p>Solutions mêlant IA et systèmes intelligents pour des projets modernes et performants.</p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
   <div class="unslate_co--section" id="contact-section">
     <div class="container">
       <div class="section-heading-wrap text-center mb-5">

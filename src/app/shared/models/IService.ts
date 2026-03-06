@@ -5,4 +5,6 @@ export interface IService {
   details: string;
   service_type: string;
   tools: string;
+  icon?: string | null;
+  icon_class?: string;
 }

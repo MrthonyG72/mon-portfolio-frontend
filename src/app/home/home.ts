@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -7,32 +7,23 @@ import { ProfileService } from '../shared/service/ProfileService';
 import { SkillService } from '../shared/service/SkillService';
 import { ProjectService } from '../shared/service/ProjectService';
 import { ContactService, IContactPayload } from '../shared/service/ContactService';
+import { OfferService } from '../shared/service/OfferService';
 import { IProfile } from '../shared/models/IProfile';
 import { environment } from '../../environments/environment';
 import { ISkill } from '../shared/models/ISkill';
 import { IProject } from '../shared/models/IProject';
+import { IService } from '../shared/models/IService';
 
 const FALLBACK: IProfile = {
-  full_name: 'Anzouan Gomis Thony Axel',
-  title: 'L3 Computer Science',
-  email: 'anzouangomisthony@gmail.com',
-  phone: '+225 0170169013',
-  about_me: `Je m'appelle Anzouan Gomis Thony Axel, étudiant en Licence 3 en Computer Science et passionné par le développement logiciel et les nouvelles technologies. Je m'intéresse particulièrement à la création d'applications web et mobiles modernes en utilisant des technologies comme Angular, Django, Python et Java et Flutter. Curieux et orienté innovation, je développe des projets mêlant full-stack, IA et systèmes intelligents afin de créer des solutions modernes, performantes et utiles.`,
+  full_name: 'ANZOUAN GOMIS THONY AXEL',
+  title: 'INGENIEUR LOGICIEL', 
+  email: '',
+  phone: '',
+  about_me: '',
   cv_url: '',
-  github_url: 'https://github.com/MrthonyG72',
-  linkedin_url: 'https://www.linkedin.com/in/gomis-thony-axel-thierry-anzouan-787a122a4/',
+  github_url: '',
+  linkedin_url: '',
 };
-
-const FALLBACK_SKILLS: string[] = [
-  'Angular',
-  'Django REST Framework',
-  'Java',
-  'Python',
-  'Flutter',
-  'TypeScript',
-  'HTML/CSS',
-  'Git',
-];
 
 @Component({
   selector: 'app-home',
@@ -43,12 +34,8 @@ const FALLBACK_SKILLS: string[] = [
 export class Home implements OnInit {
   profile = signal<IProfile>(FALLBACK);
   skills = signal<ISkill[]>([]);
-  skillsDisplay = computed(() => {
-    const list = this.skills();
-    if (list.length) return list.map(s => s.name);
-    return FALLBACK_SKILLS;
-  });
   projects = signal<IProject[]>([]);
+  services = signal<IService[]>([]);
   contactSent = signal(false);
   contactError = signal<string | null>(null);
   contactLoading = signal(false);
@@ -65,6 +52,7 @@ export class Home implements OnInit {
     private skillService: SkillService,
     private projectService: ProjectService,
     private contactService: ContactService,
+    private offerService: OfferService,
     private viewportScroller: ViewportScroller,
     private route: ActivatedRoute,
   ) {}
@@ -82,29 +70,35 @@ export class Home implements OnInit {
       next: (list) => this.projects.set(list),
       error: () => {},
     });
+    this.offerService.getServices().subscribe({
+      next: (list) => this.services.set(list),
+      error: () => {},
+    });
 
     this.route.fragment.pipe(filter(Boolean)).subscribe((fragment) => {
       setTimeout(() => this.viewportScroller.scrollToAnchor(fragment!), 100);
     });
   }
 
+  // URL de la photo de profil
   photoUrl(): string | null {
-    const p = this.profile().photo;
-    if (!p) return null;
-    return p.startsWith('http') ? p : `${environment.backendUrl}${p}`;
+    const p: any = this.profile();
+    const img = p.image || p.photo; 
+    if (!img) return null;
+    return img.startsWith('http') ? img : `${environment.backendUrl}${img}`;
   }
 
-  cvDownloadUrl(): string {
-    const p = this.profile();
-    if (p.cv_url) return p.cv_url;
-    if (p.cv_file) return p.cv_file.startsWith('http') ? p.cv_file : `${environment.backendUrl}${p.cv_file}`;
-    return '#';
-  }
-
+  // Transforme la chaîne de caractères des technos en tableau pour les badges
   getTechnologies(project: IProject): string[] {
     const t = project.technologies;
     if (!t) return [];
     return t.split(',').map(s => s.trim()).filter(Boolean);
+  }
+
+  // URL de l'image du projet (Backend Django ou Placeholder)
+  getProjectImageUrl(project: IProject): string {
+    if (!project.image) return 'https://via.placeholder.com/800x600';
+    return project.image.startsWith('http') ? project.image : `${environment.backendUrl}${project.image}`;
   }
 
   submitContact(): void {
@@ -121,7 +115,7 @@ export class Home implements OnInit {
         this.formModel = { full_name: '', object: '', email: '', message: '' };
       },
       error: () => {
-        this.contactError.set('Erreur lors de l\'envoi. Vérifiez que le backend est démarré.');
+        this.contactError.set('Erreur lors de l\'envoi.');
         this.contactLoading.set(false);
       },
     });

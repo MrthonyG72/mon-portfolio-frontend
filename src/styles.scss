@@ -40,24 +40,71 @@ body {
 /* Overrides de lisibilité pour la section À propos (template Unfold) */
 
 #about-section {
-  background: #f9fafb;
+  background-color: #ffffff !important; 
+  padding: 80px 0;
+  
+  /* On force le texte en noir ici */
+  h2, h3, p, a, span {
+    color: #000000 !important;
+  }
 }
 
-.dark-theme #about-section {
-  background: #020617;
+/* --- Section Services (Lisibilité et Dynamisme) --- */
+.service-single {
+  background: #191919;
+  border: 1px solid #333;
+  padding: 30px;
+  border-radius: 15px;
+  transition: all 0.4s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-15px);
+    border-color: #fff;
+    box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+  }
+
+  .service-icon {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+  }
 }
 
-#about-section .heading-h3,
-#about-section .lead,
-#about-section p,
-#about-section a {
-  color: #0f172a;
+/* --- Surcharges de sécurité pour la lisibilité --- */
+
+/* 1. Titres : Forcer la couleur blanche partout, SAUF dans About qui est blanc */
+h1, h2, h3, h4, .heading-h2, .heading-h3 {
+    color: #ffffff !important;
 }
 
-.dark-theme #about-section .heading-h3,
-.dark-theme #about-section .lead,
-.dark-theme #about-section p,
-.dark-theme #about-section a {
-  color: #e5e7eb;
+/* On ré-écrase spécifiquement pour About pour rester lisible */
+#about-section h2, #about-section h3, #about-section p, #about-section a {
+    color: #000000 !important;
 }
 
+/* 2. Paragraphes : Gris clair pour être lisible sur fond noir */
+p, .lead, .contact-info-label {
+    color: #cccccc !important;
+}
+
+/* 3. Section Portfolio : Correction de la confusion */
+.portfolio-item-content h3 {
+    color: #ffffff !important;
+}
+.portfolio-item-content p {
+    color: #dddddd !important;
+    background: rgba(0,0,0,0.7);
+    padding: 5px;
+}
+
+/* 4. Section Services : Amélioration de l'encadré */
+.media-v1 {
+    background: #191919;
+    padding: 20px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    transition: 0.3s;
+    
+    &:hover {
+        border-color: #fff;
+    }
+}
