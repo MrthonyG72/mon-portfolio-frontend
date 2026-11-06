@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://mon-portfolio-backend-f0io.onrender.com",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "warn"
+  }
+}

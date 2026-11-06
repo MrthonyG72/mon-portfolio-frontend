@@ -1,16 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { IProfile } from '../models/IProfile';
+import { retryColdStart } from './api.utils';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
-  private apiUrl = `${environment.apiUrl}/profile/`;
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = `${environment.apiUrl}/profile/`;
 
-  constructor(private http: HttpClient) {}
+  /** Une seule requête partagée entre tous les composants (home, footer). */
+  private readonly profile$ = this.http.get<IProfile | null>(this.apiUrl).pipe(
+    retryColdStart(),
+    shareReplay({ bufferSize: 1, refCount: false }),
+  );
 
   getProfile(): Observable<IProfile | null> {
-    return this.http.get<IProfile | null>(this.apiUrl);
+    return this.profile$;
   }
 }

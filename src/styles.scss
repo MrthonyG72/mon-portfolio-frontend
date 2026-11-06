@@ -1,20 +1,26 @@
-/* Global styles - Portfolio */
-:root {
-  --color-bg: #ffffff;
-  --color-bg-alt: #f8fafc;
-  --color-text: #0f172a;
-  --color-text-muted: #64748b;
-  --color-primary: #6366f1;
-  --color-border: #e2e8f0;
-}
+/* =========================================================
+   Portfolio — styles globaux
+   Thème sombre par défaut, section "À propos" en clair.
+   ========================================================= */
 
-.dark-theme {
-  --color-bg: #0f172a;
-  --color-bg-alt: #1e293b;
-  --color-text: #f1f5f9;
-  --color-text-muted: #94a3b8;
-  --color-primary: #a5b4fc;
-  --color-border: rgba(255, 255, 255, 0.08);
+:root {
+  --bg: #000000;
+  --bg-elev: #09090b;
+  --surface: #121216;
+  --surface-2: #1a1a20;
+  --border: rgba(255, 255, 255, 0.09);
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+  --accent: #6c73ff;
+  --accent-2: #a78bfa;
+  --accent-soft: #a5aaff;
+  --danger: #f87171;
+  --success: #4ade80;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --container: 1140px;
+  --header-h: 72px;
+  --font: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 *,
@@ -25,86 +31,300 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font);
   font-size: 16px;
   line-height: 1.6;
-  color: var(--color-text);
-  background: var(--color-bg);
-  transition: background 0.3s, color 0.3s;
-}
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 
-/* Overrides de lisibilité pour la section À propos (template Unfold) */
-
-#about-section {
-  background-color: #ffffff !important; 
-  padding: 80px 0;
-  
-  /* On force le texte en noir ici */
-  h2, h3, p, a, span {
-    color: #000000 !important;
+  &.menu-open {
+    overflow: hidden;
   }
 }
 
-/* --- Section Services (Lisibilité et Dynamisme) --- */
-.service-single {
-  background: #191919;
-  border: 1px solid #333;
-  padding: 30px;
-  border-radius: 15px;
-  transition: all 0.4s ease-in-out;
-  
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--accent-soft);
+  transition: color 0.2s ease;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.2;
+  color: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- Layout ---------- */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section {
+  padding: 104px 0;
+  scroll-margin-top: var(--header-h);
+
+  &--alt {
+    background: var(--bg-elev);
+  }
+
+  &--light {
+    background: #ffffff;
+    color: #18181b;
+  }
+}
+
+#accueil {
+  scroll-margin-top: 0;
+}
+
+.section__head {
+  max-width: 640px;
+  margin: 0 auto 56px;
+  text-align: center;
+
+  h2 {
+    margin: 0 0 14px;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+}
+
+.section__desc {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.02rem;
+
+  .section--light & {
+    color: #52525b;
+  }
+}
+
+.eyebrow {
+  display: inline-block;
+  margin: 0 0 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ---------- Boutons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 24px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
   &:hover {
-    transform: translateY(-15px);
-    border-color: #fff;
-    box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+    transform: translateY(-1px);
   }
 
-  .service-icon {
-    font-size: 3.5em;
-    margin-bottom: 20px;
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
   }
-}
 
-/* --- Surcharges de sécurité pour la lisibilité --- */
+  &--small {
+    padding: 9px 16px;
+    font-size: 0.88rem;
+  }
 
-/* 1. Titres : Forcer la couleur blanche partout, SAUF dans About qui est blanc */
-h1, h2, h3, h4, .heading-h2, .heading-h3 {
-    color: #ffffff !important;
-}
+  &--primary {
+    color: #fff;
+    background: var(--accent);
+    box-shadow: 0 10px 30px -12px rgba(108, 115, 255, 0.8);
 
-/* On ré-écrase spécifiquement pour About pour rester lisible */
-#about-section h2, #about-section h3, #about-section p, #about-section a {
-    color: #000000 !important;
-}
-
-/* 2. Paragraphes : Gris clair pour être lisible sur fond noir */
-p, .lead, .contact-info-label {
-    color: #cccccc !important;
-}
-
-/* 3. Section Portfolio : Correction de la confusion */
-.portfolio-item-content h3 {
-    color: #ffffff !important;
-}
-.portfolio-item-content p {
-    color: #dddddd !important;
-    background: rgba(0,0,0,0.7);
-    padding: 5px;
-}
-
-/* 4. Section Services : Amélioration de l'encadré */
-.media-v1 {
-    background: #191919;
-    padding: 20px;
-    border: 1px solid #333;
-    border-radius: 10px;
-    transition: 0.3s;
-    
     &:hover {
-        border-color: #fff;
+      color: #fff;
+      background: #5a61ff;
     }
+  }
+
+  &--ghost {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.25);
+
+    &:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  &--dark {
+    color: #fff;
+    background: #18181b;
+
+    &:hover {
+      color: #fff;
+      background: #27272a;
+    }
+  }
+
+  &--outline-dark {
+    color: #18181b;
+    border-color: #d4d4d8;
+
+    &:hover {
+      color: #18181b;
+      border-color: #18181b;
+    }
+  }
+}
+
+.icon-link {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+}
+
+/* ---------- Puces (technologies, outils) ---------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-soft);
+  background: rgba(108, 115, 255, 0.12);
+  border: 1px solid rgba(108, 115, 255, 0.3);
+  border-radius: 999px;
+
+  &--muted {
+    color: var(--muted);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--border);
+  }
+}
+
+/* ---------- Lien d'évitement ---------- */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 200;
+  padding: 10px 16px;
+  color: #000;
+  background: #fff;
+  border-radius: 8px;
+  font-weight: 600;
+
+  &:focus {
+    top: 16px;
+  }
+}
+
+/* ---------- Animations de révélation (directive appReveal) ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+
+  &.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 72px 0;
+  }
+
+  .section__head {
+    margin-bottom: 40px;
+  }
 }

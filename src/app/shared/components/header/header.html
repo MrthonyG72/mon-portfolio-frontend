@@ -1,38 +1,55 @@
-<nav class="unslate_co--site-nav site-nav-target">
-  <div class="container">
-    <div class="row align-items-center justify-content-between text-left">
-      <div class="col-md-5 text-right">
-        <ul class="site-nav-ul js-clone-nav text-left d-none d-lg-inline-block">
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+
+<header class="header" [class.is-scrolled]="scrolled() || !onHome()" [class.is-open]="menuOpen()">
+  <div class="container header__inner">
+    <a href="#accueil" class="header__logo" (click)="go($event, 'accueil')" aria-label="Anzouan, retour à l'accueil">
+      Anzouan<span>.</span>
+    </a>
+
+    <nav class="header__nav" aria-label="Navigation principale">
+      <ul>
+        @for (link of links; track link.id) {
           <li>
-            <a href="#home-section" class="nav-link">Accueil</a>
+            <a
+              [href]="'#' + link.id"
+              [class.is-active]="active() === link.id"
+              [attr.aria-current]="active() === link.id ? 'true' : null"
+              (click)="go($event, link.id)"
+            >
+              {{ link.label }}
+            </a>
           </li>
-          <li>
-            <a href="#portfolio-section" class="nav-link">Projets</a>
-          </li>
-          <li>
-            <a href="#about-section" class="nav-link">À propos</a>
-          </li>
-        </ul>
-      </div>
-      <div class="site-logo pos-absolute">
-        <a href="#home-section" class="unslate_co--site-logo">Anzouan<span>.</span></a>
-      </div>
-      <div class="col-md-5 text-right text-lg-left">
-        <ul class="site-nav-ul js-clone-nav text-left d-none d-lg-inline-block">
-          <li>
-            <a href="#skills-section" class="nav-link">Compétences</a>
-          </li>
-          <li>
-            <a href="#services-section" class="nav-link">Mes Services</a>
-          </li>
-          <li>
-            <a href="#contact-section" class="nav-link">Contact</a>
-          </li>
-        </ul>
-        <ul class="site-nav-ul-none-onepage text-right d-inline-block d-lg-none">
-          <li><a href="#" class="js-menu-toggle">Menu</a></li>
-        </ul>
-      </div>
-    </div>
+        }
+      </ul>
+    </nav>
+
+    <a href="#contact" class="btn btn--primary btn--small header__cta" (click)="go($event, 'contact')">
+      Me contacter
+    </a>
+
+    <button
+      type="button"
+      class="header__burger"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="menu-mobile"
+      [attr.aria-label]="menuOpen() ? 'Fermer le menu' : 'Ouvrir le menu'"
+      (click)="toggleMenu()"
+    >
+      <span></span><span></span><span></span>
+    </button>
   </div>
+</header>
+
+<div class="menu-backdrop" [class.is-open]="menuOpen()" (click)="closeMenu()" aria-hidden="true"></div>
+
+<nav id="menu-mobile" class="menu" [class.is-open]="menuOpen()" aria-label="Menu mobile">
+  <ul>
+    @for (link of links; track link.id) {
+      <li>
+        <a [href]="'#' + link.id" [class.is-active]="active() === link.id" (click)="go($event, link.id)">
+          {{ link.label }}
+        </a>
+      </li>
+    }
+  </ul>
 </nav>

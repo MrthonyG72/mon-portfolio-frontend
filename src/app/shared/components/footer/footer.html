@@ -1,23 +1,40 @@
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-links">
-      @if (profile(); as p) {
-        @if (p.cv_url || p.cv_file) {
-          <a [href]="cvLink()" target="_blank" rel="noopener" class="footer-link">Télécharger le CV</a>
-        }
-        @if (p.github_url) {
-          <a [href]="p.github_url" target="_blank" rel="noopener" class="footer-link" aria-label="GitHub">GitHub</a>
-        }
-        @if (p.linkedin_url) {
-          <a [href]="p.linkedin_url" target="_blank" rel="noopener" class="footer-link" aria-label="LinkedIn">LinkedIn</a>
-        }
-      }
-      @if (!profile()) {
-        <a href="#" class="footer-link">CV</a>
-        <a href="https://github.com" target="_blank" rel="noopener" class="footer-link">GitHub</a>
-        <a href="https://linkedin.com" target="_blank" rel="noopener" class="footer-link">LinkedIn</a>
-      }
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <a href="#accueil" class="footer__logo" (click)="go($event, 'accueil')">Anzouan<span>.</span></a>
+      <p>{{ profile().title }} — développement web, mobile et intelligence artificielle.</p>
     </div>
-    <p class="copyright">© {{ year }} Anzouan Gomis Thony Axel · L3 Computer Science</p>
+
+    <nav class="footer__nav" aria-label="Navigation du pied de page">
+      <ul>
+        @for (link of links; track link.id) {
+          <li><a [href]="'#' + link.id" (click)="go($event, link.id)">{{ link.label }}</a></li>
+        }
+      </ul>
+    </nav>
+
+    <div class="footer__social">
+      @if (cvUrl(); as cv) {
+        <a [href]="cv" target="_blank" rel="noopener" class="footer__pill">Mon CV</a>
+      }
+      @if (profile().github_url) {
+        <a [href]="profile().github_url" target="_blank" rel="noopener" class="icon-link" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+        </a>
+      }
+      @if (profile().linkedin_url) {
+        <a [href]="profile().linkedin_url" target="_blank" rel="noopener" class="icon-link" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.4 20.5h-3.5v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.4v1.6c.5-.9 1.6-1.9 3.4-1.9 3.6 0 4.3 2.4 4.3 5.5v6.3ZM5.3 7.4a2.1 2.1 0 1 1 0-4.1 2.1 2.1 0 0 1 0 4.1Zm1.8 13.1H3.6V9h3.5v11.5ZM22.2 0H1.8C.8 0 0 .8 0 1.7v20.5c0 1 .8 1.8 1.8 1.8h20.4c1 0 1.8-.8 1.8-1.8V1.7c0-1-.8-1.7-1.8-1.7Z"/></svg>
+        </a>
+      }
+      <a [href]="'mailto:' + profile().email" class="icon-link" aria-label="Email">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <p>© {{ year }} {{ profile().full_name }}. Tous droits réservés.</p>
+    <p>Conçu avec Angular et Django.</p>
   </div>
 </footer>

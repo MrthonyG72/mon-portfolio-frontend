@@ -1,59 +1,65 @@
-# Portfolio
+# Portfolio — Anzouan Gomis Thony Axel
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
+Site vitrine personnel (ingénieur logiciel) : projets, parcours, compétences, services et formulaire de contact.
 
-## Development server
+- **Frontend** : Angular 21 (composants standalone, signals, contrôle de flux `@if/@for`), SCSS, sans jQuery ni framework CSS.
+- **Backend** : API REST Django hébergée sur Render (`https://mon-portfolio-backend-f0io.onrender.com/api/v1`). Le contenu (profil, projets, compétences, services) se gère depuis l'admin Django.
+- **Hébergement** : Vercel (`https://mon-portfolio-frontend.vercel.app`).
 
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Démarrer en local
 
 ```bash
-ng generate component component-name
+npm install
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Puis ouvrir `http://localhost:4200/`.
 
-```bash
-ng generate --help
+En développement, les appels `/api/...` sont relayés vers le backend Render par le proxy du serveur de dev (`proxy.conf.json`), ce qui évite les erreurs CORS depuis `localhost`. L'environnement de dev est défini dans `src/environments/environment.development.ts`.
+
+> Le backend Render (offre gratuite) se met en veille : le premier appel peut prendre 30 à 60 s. En attendant, le site affiche les données de secours de `src/app/shared/data/fallback.ts`, puis les remplace par celles de l'API.
+
+## Scripts
+
+| Commande        | Rôle                                                   |
+| --------------- | ------------------------------------------------------ |
+| `npm start`     | Serveur de dev avec proxy API et rechargement à chaud  |
+| `npm run build` | Build de production dans `dist/portfolio/browser`      |
+| `npm test`      | Tests unitaires (Vitest)                               |
+
+## Structure
+
+```
+src/
+├─ app/
+│  ├─ home/                 # Page d'accueil (hero, projets, à propos, compétences, services, contact)
+│  ├─ notfound/             # Page 404
+│  └─ shared/
+│     ├─ components/        # header (navigation, menu mobile) et footer
+│     ├─ data/fallback.ts   # Données affichées avant/sans réponse de l'API
+│     ├─ directives/        # appReveal : animation à l'entrée dans l'écran
+│     ├─ models/            # Interfaces IProfile, IProject, ISkill, IService
+│     └─ service/           # Appels API + scroll-spy (section active)
+├─ assets/img/              # Image du hero et portrait
+├─ environments/            # URLs de l'API (prod / dev)
+└─ styles.scss              # Variables, boutons, sections, animations
 ```
 
-## Building
+## Mettre à jour le contenu
 
-To build the project run:
+Deux sources se complètent :
 
-```bash
-ng build
-```
+- **Admin Django** : profil (photo, liens), projets (image, description, technologies séparées par des virgules, lien), compétences (pourcentage), services (description, outils), expériences.
+- **`src/app/shared/data/cv.ts`** : tout ce que le backend ne gère pas, repris du CV : bio, localisation, langues, permis, projets et expériences du CV, formation, certifications, stack technique et savoir-faire.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Les projets et expériences des deux sources sont fusionnés à l'affichage : un projet de l'admin portant le même titre qu'un projet du CV remplace celui du CV (et garde son année).
 
-## Running unit tests
+Le **CV PDF** est servi par le site depuis `public/cv/`. Pour le mettre à jour, remplacer le fichier (et son nom dans `cv.ts` s'il change). Le champ `cv_url` de l'admin, s'il est renseigné, prend le dessus.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+`src/app/shared/data/fallback.ts` contient le profil, les compétences et les services affichés pendant le réveil du backend ; à garder à peu près synchronisé avec l'admin.
 
-```bash
-ng test
-```
+## Déploiement
 
-## Running end-to-end tests
+Vercel construit le projet avec `npm run build` et sert `dist/portfolio/browser`. Le fichier `vercel.json` redirige toutes les routes vers `index.html` pour que la page 404 Angular fonctionne même en accès direct.
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Le backend doit autoriser l'origine du site dans sa configuration CORS (`CORS_ALLOWED_ORIGINS`).

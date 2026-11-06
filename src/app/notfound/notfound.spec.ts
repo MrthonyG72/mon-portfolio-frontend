@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { Notfound } from './notfound';
 
@@ -8,9 +9,9 @@ describe('Notfound', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Notfound]
-    })
-    .compileComponents();
+      imports: [Notfound],
+      providers: [provideRouter([])],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Notfound);
     component = fixture.componentInstance;
@@ -19,5 +20,10 @@ describe('Notfound', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('propose un lien vers l’accueil', () => {
+    const link = (fixture.nativeElement as HTMLElement).querySelector('a[href="/"]');
+    expect(link).toBeTruthy();
   });
 });

@@ -1,369 +1,480 @@
-<div class="unslate_co--site-inner">
-  <div
-    class="cover-v1 jarallax"
-    style="background-image: url('assets/portfolio-template/unfold-master/images/cover_bg_2.jpg');"
-    id="home-section"
-  >
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-md-7 mx-auto text-center">
-          <h1 class="heading gsap-reveal-hero">{{ profile().full_name }}</h1>
-          <h2 class="subheading gsap-reveal-hero">{{ profile().title }}</h2>
-        </div>
+<main id="contenu">
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="accueil">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="container hero__inner">
+      <p class="hero__eyebrow">Bonjour, je suis</p>
+      <h1 class="hero__title">{{ profile().full_name }}</h1>
+      <p class="hero__subtitle">{{ profile().title }}</p>
+      @if (tagline()) {
+        <p class="hero__tagline">{{ tagline() }}</p>
+      }
+      <div class="hero__actions">
+        <a href="#projets" class="btn btn--primary" (click)="go($event, 'projets')">Voir mes projets</a>
+        <a [href]="cvUrl()" target="_blank" rel="noopener" class="btn btn--ghost">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Mon CV
+        </a>
+      </div>
+      <div class="hero__social">
+        @if (profile().github_url) {
+          <a [href]="profile().github_url" target="_blank" rel="noopener" aria-label="Profil GitHub" class="icon-link">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+          </a>
+        }
+        @if (profile().linkedin_url) {
+          <a [href]="profile().linkedin_url" target="_blank" rel="noopener" aria-label="Profil LinkedIn" class="icon-link">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M20.4 20.5h-3.5v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.4v1.6c.5-.9 1.6-1.9 3.4-1.9 3.6 0 4.3 2.4 4.3 5.5v6.3ZM5.3 7.4a2.1 2.1 0 1 1 0-4.1 2.1 2.1 0 0 1 0 4.1Zm1.8 13.1H3.6V9h3.5v11.5ZM22.2 0H1.8C.8 0 0 .8 0 1.7v20.5c0 1 .8 1.8 1.8 1.8h20.4c1 0 1.8-.8 1.8-1.8V1.7c0-1-.8-1.7-1.8-1.7Z"/></svg>
+          </a>
+        }
+        <a [href]="'mailto:' + profile().email" aria-label="Envoyer un email" class="icon-link">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+        </a>
       </div>
     </div>
-
-    <a href="#portfolio-section" class="mouse-wrap smoothscroll">
-      <span class="mouse">
-        <span class="scroll"></span>
-      </span>
-      <span class="mouse-label">Scroll</span>
+    <a href="#projets" class="hero__scroll" (click)="go($event, 'projets')" aria-label="Défiler vers les projets">
+      <span class="mouse"><span></span></span>
+      <span class="hero__scroll-label">Défiler</span>
     </a>
-  </div>
+  </section>
 
-  <section class="portfolio" id="portfolio" style="padding: 80px 0; background-color: #000; overflow: hidden;">
-  <div class="container">
-    
-    <div class="section-title mb-5 text-center" data-aos="fade-up">
-      <h2 class="text_background">
-        My Projects
-        <span class="heading_background">Portfolio</span>
-      </h2>
-    </div>
+  <!-- ========== PROJETS ========== -->
+  <section class="section" id="projets">
+    <div class="container">
+      <header class="section__head" appReveal>
+        <p class="eyebrow">Portfolio</p>
+        <h2>Mes projets</h2>
+        <p class="section__desc">Une sélection de réalisations, de l'analyse des besoins jusqu'au déploiement.</p>
+      </header>
 
-    <div class="row">
-      @for (project of projects(); track project.id; let i = $index) {
-        <div class="col-lg-6 col-md-6 mb-5" data-aos="fade-up" [attr.data-aos-delay]="i * 100">
-          
-          <div class="project-card">
-            
-            <div class="project-image-wrapper">
-              <img [src]="getProjectImageUrl(project)" 
-                   alt="{{ project.title }}"
-                   class="project-img">
-            </div>
-            
-            <div class="project-content">
-              <h3>{{ project.title }}</h3>
-              
-              <div class="tech-container">
-                @if (getTechnologies(project).length) {
-                  @for (tech of getTechnologies(project); track tech) {
-                    <span class="tech-badge">{{ tech }}</span>
-                  }
-                } @else {
-                  <span class="tech-badge">Développement</span>
-                }
-              </div>
-
-              @if (project.link) {
-                <div class="mt-4">
-                  <a [href]="project.link" target="_blank" class="project-link">
-                    Voir le projet <i class="fas fa-external-link-alt ml-2"></i>
-                  </a>
+      <div class="projects">
+        @for (project of projects(); track project.id; let i = $index) {
+          <article class="project" appReveal [revealDelay]="(i % 2) * 100">
+            <div class="project__media">
+              @if (projectImage(project); as img) {
+                <img [src]="img" [alt]="'Aperçu du projet ' + project.title" loading="lazy" />
+              } @else {
+                <div class="project__placeholder" aria-hidden="true">
+                  <span>{{ project.title.charAt(0) }}</span>
                 </div>
               }
+              @if (project.badge) {
+                <span class="project__badge">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.7V17c0 .6-.4 1-1 1H8a1 1 0 0 0-1 1v3h10v-3a1 1 0 0 0-1-1h-1c-.6 0-1-.4-1-1v-2.3M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                  {{ project.badge }}
+                </span>
+              }
             </div>
-
-          </div>
-        </div>
-      }
-    </div>
-  </div>
-</section>
-
-  <div class="unslate_co--section" id="about-section">
-    <div class="container">
-      <div class="section-heading-wrap text-center mb-5">
-        <h2 class="heading-h2 text-center divider">
-          <span class="gsap-reveal">À propos de moi</span>
-        </h2>
-        <span class="gsap-reveal">
-          <img
-            src="assets/portfolio-template/unfold-master/images/divider.png"
-            alt="divider"
-            width="76"
-          />
-        </span>
-      </div>
-
-      <div class="row mt-5 justify-content-between">
-        <div class="col-lg-7 mb-5 mb-lg-0">
-          <figure class="dotted-bg gsap-reveal-img" data-aos="fade-right">
-            @if (photoUrl()) {
-              <img
-                [src]="photoUrl()"
-                alt="À propos"
-                class="img-fluid"
-              />
-            } @else {
-              <img
-                src="assets/portfolio-template/unfold-master/images/about_me_pic2.jpg"
-                alt="À propos"
-                class="img-fluid"
-              />
-            }
-          </figure>
-        </div>
-        <div class="col-lg-4 pr-lg-5" data-aos="fade-left" data-aos-delay="200">
-          <h3 class="mb-4 heading-h3">
-            <span class="gsap-reveal">{{ profile().full_name }}</span>
-          </h3>
-          <p class="lead gsap-reveal">{{ profile().about_me }}</p>
-          <p class="mb-3 gsap-reveal">
-            <strong>Email :</strong>
-            <a [href]="'mailto:' + profile().email">{{ profile().email }}</a>
-          </p>
-          @if (profile().phone) {
-            <p class="mb-3 gsap-reveal">
-              <strong>Téléphone :</strong>
-              <a [href]="'tel:' + profile().phone">{{ profile().phone }}</a>
-            </p>
-          }
-          <p class="gsap-reveal">
-            @if (profile().github_url) {
-              <a
-                [href]="profile().github_url"
-                target="_blank"
-                rel="noopener"
-                class="btn btn-outline-pill btn-custom-light mr-2"
-                >GitHub</a
-              >
-            }
-            @if (profile().linkedin_url) {
-              <a
-                [href]="profile().linkedin_url"
-                target="_blank"
-                rel="noopener"
-                class="btn btn-outline-pill btn-custom-light"
-                >LinkedIn</a
-              >
-            }
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="unslate_co--section section-counter" id="skills-section">
-    <div class="container">
-      <div class="section-heading-wrap text-center mb-5">
-        <h2 class="heading-h2 text-center divider">
-          <span class="gsap-reveal">Mes Compétences</span>
-        </h2>
-        <span class="gsap-reveal">
-          <img
-            src="assets/portfolio-template/unfold-master/images/divider.png"
-            alt="divider"
-            width="76"
-          />
-        </span>
-      </div>
-
-      @if (skills().length) {
-        <div class="row pt-5">
-          @for (skill of skills(); track skill.id; let i = $index) {
-            <div
-              class="col-12 col-sm-6 col-lg-4 mb-4"
-              data-aos="fade-up"
-              [attr.data-aos-delay]="i * 100"
-            >
-              <div class="skill-item gsap-reveal">
-                <div class="skill-header">
-                  <span class="skill-name">{{ skill.name }}</span>
-                  <span class="skill-percent">{{ skill.percentage }}%</span>
-                </div>
-                <div class="skill-bar">
-                  <div
-                    class="skill-bar-fill"
-                    [style.width.%]="skill.percentage"
-                  ></div>
-                </div>
-              </div>
-            </div>
-          }
-        </div>
-      } @else {
-        <p class="text-center text-muted">
-          Aucune compétence pour le moment. Ajoutez-en depuis l'admin Django.
-        </p>
-      }
-    </div>
-  </div>
-
-  <div class="unslate_co--section" id="services-section">
-    <div class="container">
-      <div class="section-heading-wrap text-center mb-5">
-        <h2 class="heading-h2 text-center divider">
-          <span class="gsap-reveal">Mes Services</span>
-        </h2>
-        <span class="gsap-reveal">
-          <img
-            src="assets/portfolio-template/unfold-master/images/divider.png"
-            alt="divider"
-            width="76"
-          />
-        </span>
-      </div>
-
-      <div class="row">
-        @for (svc of services(); track svc.id) {
-          <div class="col-sm-6 col-md-6 col-lg-4 mb-4" data-aos="fade-up" [attr.data-aos-delay]="$index * 100">
-            <div class="media-v1">
-              <div class="icon-wrap">
-                @if (svc.icon) {
-                  <img [src]="svc.icon" alt="" width="48" height="48" style="object-fit:contain;" />
-                } @else if (svc.icon_class) {
-                  <span [class]="svc.icon_class"></span>
-                } @else {
-                  <span class="icon-laptop2"></span>
+            <div class="project__body">
+              <div class="project__meta">
+                <h3>{{ project.title }}</h3>
+                @if (project.year) {
+                  <span class="project__year">{{ project.year }}</span>
                 }
               </div>
-              <div class="body-wrap">
-                <h3>{{ svc.name }}</h3>
-                <p>{{ svc.details }}</p>
-              </div>
+              @if (project.resume) {
+                <p class="project__desc">{{ project.resume }}</p>
+              }
+              @if (splitList(project.technologies).length) {
+                <ul class="chips" aria-label="Technologies">
+                  @for (tech of splitList(project.technologies); track tech) {
+                    <li class="chip">{{ tech }}</li>
+                  }
+                </ul>
+              }
+              @if (project.link) {
+                <a [href]="project.link" target="_blank" rel="noopener" class="project__link">
+                  Voir le projet
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>
+                </a>
+              }
             </div>
-          </div>
+          </article>
         } @empty {
-          <div class="col-sm-6 col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="0">
-            <div class="media-v1">
-              <div class="icon-wrap"><span class="icon-laptop2"></span></div>
-              <div class="body-wrap">
-                <h3>Développement Web</h3>
-                <p>Création d'applications web modernes avec Angular, Django et d'autres technologies full-stack.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="media-v1">
-              <div class="icon-wrap"><span class="icon-phone2"></span></div>
-              <div class="body-wrap">
-                <h3>Développement Mobile</h3>
-                <p>Conception d'applications mobiles performantes avec Flutter pour Android et iOS.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-            <div class="media-v1">
-              <div class="icon-wrap"><span class="icon-lightbulb"></span></div>
-              <div class="body-wrap">
-                <h3>Conception &amp; Innovation</h3>
-                <p>Solutions mêlant IA et systèmes intelligents pour des projets modernes et performants.</p>
-              </div>
-            </div>
-          </div>
+          <p class="notice">De nouveaux projets arrivent bientôt.</p>
         }
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="unslate_co--section" id="contact-section">
-    <div class="container">
-      <div class="section-heading-wrap text-center mb-5">
-        <h2 class="heading-h2 text-center divider">
-          <span class="gsap-reveal">Contact</span>
-        </h2>
-        <span class="gsap-reveal">
-          <img
-            src="assets/portfolio-template/unfold-master/images/divider.png"
-            alt="divider"
-            width="76"
-          />
-        </span>
-      </div>
-
-      <div class="row justify-content-between">
-        <div class="col-md-6">
-          @if (contactSent()) {
-            <p class="contact-success">
-              Message envoyé avec succès. Je vous recontacterai rapidement.
-            </p>
-          } @else {
-            <form class="form-outline-style-v1" (ngSubmit)="submitContact()">
-              @if (contactError(); as err) {
-                <p class="form-error">{{ err }}</p>
+  <!-- ========== À PROPOS ========== -->
+  <section class="section section--light" id="a-propos">
+    <div class="container about">
+      <figure class="about__photo" appReveal>
+        <img [src]="photoUrl()" [alt]="'Portrait de ' + profile().full_name" width="848" height="1160" loading="lazy" />
+      </figure>
+      <div class="about__body" appReveal [revealDelay]="120">
+        <p class="eyebrow">À propos</p>
+        <h2>{{ profile().full_name }}</h2>
+        <p class="about__role">{{ cv.title }}</p>
+        @for (paragraph of cv.bio; track $index) {
+          <p class="about__text">{{ paragraph }}</p>
+        }
+        <dl class="about__info">
+          <div>
+            <dt>Email</dt>
+            <dd><a [href]="'mailto:' + profile().email">{{ profile().email }}</a></dd>
+          </div>
+          @if (profile().phone) {
+            <div>
+              <dt>Téléphone</dt>
+              <dd><a [href]="'tel:' + phoneHref()">{{ profile().phone }}</a></dd>
+            </div>
+          }
+          <div>
+            <dt>Localisation</dt>
+            <dd>{{ cv.location }}</dd>
+          </div>
+          <div>
+            <dt>Langues</dt>
+            <dd>
+              @for (lang of cv.languages; track lang.name; let last = $last) {
+                {{ lang.name }} ({{ lang.level }}){{ last ? '' : ', ' }}
               }
-              <div class="form-group row mb-0">
-                <div class="col-lg-6 form-group gsap-reveal">
-                  <label for="name">Nom complet *</label>
+            </dd>
+          </div>
+          <div>
+            <dt>Mobilité</dt>
+            <dd>{{ cv.drivingLicense }}</dd>
+          </div>
+        </dl>
+        <div class="about__actions">
+          <a [href]="cvUrl()" target="_blank" rel="noopener" class="btn btn--dark">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Télécharger mon CV
+          </a>
+          @if (profile().github_url) {
+            <a [href]="profile().github_url" target="_blank" rel="noopener" class="btn btn--outline-dark">GitHub</a>
+          }
+          @if (profile().linkedin_url) {
+            <a [href]="profile().linkedin_url" target="_blank" rel="noopener" class="btn btn--outline-dark">LinkedIn</a>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PARCOURS ========== -->
+  <section class="section section--alt" id="parcours">
+    <div class="container">
+      <header class="section__head" appReveal>
+        <p class="eyebrow">Parcours</p>
+        <h2>Expériences et formation</h2>
+        <p class="section__desc">Hackathons, projets réalisés, diplômes et certifications.</p>
+      </header>
+
+      <div class="parcours">
+        <div class="parcours__col" appReveal>
+          <h3 class="parcours__title">
+            <span class="parcours__title-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2M2 13h20"/></svg>
+            </span>
+            Expériences et projets
+          </h3>
+          <ol class="timeline">
+            @for (exp of experiences(); track exp.title) {
+              <li class="timeline__item">
+                <span class="timeline__period">{{ exp.period }}</span>
+                <h4>{{ exp.title }}</h4>
+                @if (exp.organisation) {
+                  <p class="timeline__org">{{ exp.organisation }}</p>
+                }
+                <p>{{ exp.description }}</p>
+                @if (exp.highlights?.length) {
+                  <ul class="timeline__list">
+                    @for (h of exp.highlights; track h) {
+                      <li>{{ h }}</li>
+                    }
+                  </ul>
+                }
+              </li>
+            }
+          </ol>
+        </div>
+
+        <div class="parcours__col" appReveal [revealDelay]="120">
+          <h3 class="parcours__title">
+            <span class="parcours__title-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </span>
+            Formation et certifications
+          </h3>
+          <ol class="timeline">
+            @for (edu of cv.education; track edu.title) {
+              <li class="timeline__item" [class.timeline__item--cert]="edu.kind === 'certification'">
+                <span class="timeline__period">{{ edu.period }}</span>
+                <h4>{{ edu.title }}</h4>
+                <p class="timeline__org">{{ edu.school }}</p>
+                @if (edu.kind === 'certification') {
+                  <span class="chip chip--muted">Certification</span>
+                }
+              </li>
+            }
+          </ol>
+
+          <h3 class="parcours__title parcours__title--sub">
+            <span class="parcours__title-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </span>
+            Langues
+          </h3>
+          <ul class="langs">
+            @for (lang of cv.languages; track lang.name) {
+              <li><strong>{{ lang.name }}</strong><span>{{ lang.level }}</span></li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== COMPÉTENCES ========== -->
+  <section class="section" id="competences">
+    <div class="container">
+      <header class="section__head" appReveal>
+        <p class="eyebrow">Expertise</p>
+        <h2>Mes compétences</h2>
+        <p class="section__desc">Les technologies que j'utilise au quotidien pour concevoir et livrer des solutions.</p>
+      </header>
+
+      <ul class="skills">
+        @for (skill of sortedSkills(); track skill.id; let i = $index) {
+          <li class="skill" appReveal [revealDelay]="(i % 3) * 80" [style.--w]="skill.percentage + '%'">
+            <div class="skill__head">
+              <span class="skill__name">{{ skill.name }}</span>
+              <span class="skill__pct">{{ skill.percentage }}&nbsp;%</span>
+            </div>
+            <div
+              class="skill__bar"
+              role="progressbar"
+              [attr.aria-valuenow]="skill.percentage"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [attr.aria-label]="skill.name"
+            >
+              <span class="skill__fill"></span>
+            </div>
+          </li>
+        }
+      </ul>
+
+      <div class="stack" appReveal>
+        <h3 class="stack__title">Stack technique</h3>
+        <div class="stack__grid">
+          @for (group of cv.skillGroups; track group.label) {
+            <div class="stack__group">
+              <h4>{{ group.label }}</h4>
+              <ul class="chips">
+                @for (item of group.items; track item) {
+                  <li class="chip">{{ item }}</li>
+                }
+              </ul>
+            </div>
+          }
+          <div class="stack__group">
+            <h4>Savoir-faire</h4>
+            <ul class="chips">
+              @for (item of cv.softSkills; track item) {
+                <li class="chip chip--muted">{{ item }}</li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SERVICES ========== -->
+  <section class="section section--alt" id="services">
+    <div class="container">
+      <header class="section__head" appReveal>
+        <p class="eyebrow">Services</p>
+        <h2>Ce que je peux faire pour vous</h2>
+        <p class="section__desc">Des solutions sur mesure, du site vitrine à l'application intelligente.</p>
+      </header>
+      <div class="services">
+        @for (svc of services(); track svc.id; let i = $index) {
+          <article class="service" appReveal [revealDelay]="i * 100">
+            <div class="service__icon" aria-hidden="true">
+              @switch (iconKey(svc)) {
+                @case ('mobile') {
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
+                }
+                @case ('ai') {
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M9 2v2M15 20v2M9 20v2M2 15h2M2 9h2M20 15h2M20 9h2"/></svg>
+                }
+                @default {
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                }
+              }
+            </div>
+            <h3>{{ svc.name }}</h3>
+            <p>{{ svc.details }}</p>
+            @if (splitList(svc.tools).length) {
+              <ul class="chips" aria-label="Outils">
+                @for (tool of splitList(svc.tools); track tool) {
+                  <li class="chip chip--muted">{{ tool }}</li>
+                }
+              </ul>
+            }
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CONTACT ========== -->
+  <section class="section" id="contact">
+    <div class="container">
+      <header class="section__head" appReveal>
+        <p class="eyebrow">Contact</p>
+        <h2>Travaillons ensemble</h2>
+        <p class="section__desc">Un projet, une question, une opportunité ? Écrivez-moi, je réponds rapidement.</p>
+      </header>
+
+      <div class="contact">
+        <div class="contact__form" appReveal>
+          @if (contactSent()) {
+            <div class="contact__success" role="status">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>
+              <h3>Message envoyé&nbsp;!</h3>
+              <p>Merci pour votre message, je vous recontacte dans les plus brefs délais.</p>
+              <button type="button" class="btn btn--ghost" (click)="resetContact()">Envoyer un autre message</button>
+            </div>
+          } @else {
+            <form #contactForm="ngForm" (ngSubmit)="submitContact(contactForm)" novalidate>
+              <div class="field-row">
+                <div class="field">
+                  <label for="full_name">Nom complet <span class="req" aria-hidden="true">*</span></label>
                   <input
-                    id="name"
+                    id="full_name"
                     name="full_name"
                     type="text"
-                    class="form-control"
-                    [(ngModel)]="formModel.full_name"
+                    autocomplete="name"
                     required
+                    minlength="2"
+                    [(ngModel)]="form.full_name"
+                    #nameCtrl="ngModel"
+                    [class.is-invalid]="nameCtrl.invalid && (nameCtrl.touched || submitted())"
+                    [attr.aria-invalid]="nameCtrl.invalid && (nameCtrl.touched || submitted()) ? 'true' : null"
                   />
+                  @if (nameCtrl.invalid && (nameCtrl.touched || submitted())) {
+                    <p class="field__error">Merci d'indiquer votre nom.</p>
+                  }
                 </div>
-                <div class="col-lg-6 form-group gsap-reveal">
-                  <label for="email">Email *</label>
+                <div class="field">
+                  <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
                   <input
                     id="email"
                     name="email"
                     type="email"
-                    class="form-control"
-                    [(ngModel)]="formModel.email"
+                    autocomplete="email"
                     required
+                    email
+                    [(ngModel)]="form.email"
+                    #emailCtrl="ngModel"
+                    [class.is-invalid]="emailCtrl.invalid && (emailCtrl.touched || submitted())"
+                    [attr.aria-invalid]="emailCtrl.invalid && (emailCtrl.touched || submitted()) ? 'true' : null"
                   />
-                </div>
-                <div class="col-lg-12 form-group gsap-reveal">
-                  <label for="object">Objet</label>
-                  <input
-                    id="object"
-                    name="object"
-                    type="text"
-                    class="form-control"
-                    [(ngModel)]="formModel.object"
-                  />
-                </div>
-                <div class="col-lg-12 form-group gsap-reveal">
-                  <label for="message">Message *</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    cols="30"
-                    rows="7"
-                    class="form-control"
-                    [(ngModel)]="formModel.message"
-                    required
-                  ></textarea>
+                  @if (emailCtrl.invalid && (emailCtrl.touched || submitted())) {
+                    <p class="field__error">Merci d'indiquer une adresse email valide.</p>
+                  }
                 </div>
               </div>
-              <div class="form-group row gsap-reveal">
-                <div class="col-md-12 d-flex align-items-center">
-                  <button
-                    type="submit"
-                    class="btn btn-outline-pill btn-custom-light mr-3"
-                    [disabled]="contactLoading()"
-                  >
-                    {{ contactLoading() ? 'Envoi...' : 'Envoyer' }}
-                  </button>
-                </div>
+
+              <div class="field">
+                <label for="object">Objet</label>
+                <input id="object" name="object" type="text" [(ngModel)]="form.object" placeholder="Ex. : Proposition de collaboration" />
               </div>
+
+              <div class="field">
+                <label for="message">Message <span class="req" aria-hidden="true">*</span></label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="6"
+                  required
+                  minlength="10"
+                  [(ngModel)]="form.message"
+                  #messageCtrl="ngModel"
+                  [class.is-invalid]="messageCtrl.invalid && (messageCtrl.touched || submitted())"
+                  [attr.aria-invalid]="messageCtrl.invalid && (messageCtrl.touched || submitted()) ? 'true' : null"
+                ></textarea>
+                @if (messageCtrl.invalid && (messageCtrl.touched || submitted())) {
+                  <p class="field__error">Votre message doit contenir au moins 10 caractères.</p>
+                }
+              </div>
+
+              <!-- Champ anti-spam invisible -->
+              <div class="field field--hp" aria-hidden="true">
+                <label for="website">Site web</label>
+                <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" [(ngModel)]="honeypot" />
+              </div>
+
+              @if (contactError(); as err) {
+                <p class="form__error" role="alert">{{ err }}</p>
+              }
+
+              <button type="submit" class="btn btn--primary" [disabled]="contactLoading()">
+                @if (contactLoading()) {
+                  Envoi en cours…
+                } @else {
+                  Envoyer le message
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                }
+              </button>
             </form>
           }
         </div>
 
-        <div class="col-md-4">
-          <div class="contact-info-v1">
-            <div class="gsap-reveal d-block">
-              <span class="d-block contact-info-label">Email</span>
-              <a [href]="'mailto:' + profile().email" class="contact-info-val">
-                {{ profile().email }}
-              </a>
+        <aside class="contact__info" appReveal [revealDelay]="120">
+          <div class="contact__item">
+            <span class="contact__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+            </span>
+            <div>
+              <span class="contact__label">Email</span>
+              <a [href]="'mailto:' + profile().email">{{ profile().email }}</a>
             </div>
-            @if (profile().phone) {
-              <div class="gsap-reveal d-block">
-                <span class="d-block contact-info-label">Téléphone</span>
-                <a [href]="'tel:' + profile().phone" class="contact-info-val">
-                  {{ profile().phone }}
-                </a>
-              </div>
-            }
           </div>
-        </div>
+          @if (profile().phone) {
+            <div class="contact__item">
+              <span class="contact__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.9 2.1Z"/></svg>
+              </span>
+              <div>
+                <span class="contact__label">Téléphone</span>
+                <a [href]="'tel:' + phoneHref()">{{ profile().phone }}</a>
+              </div>
+            </div>
+          }
+          <div class="contact__item">
+            <span class="contact__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            </span>
+            <div>
+              <span class="contact__label">Localisation</span>
+              <span class="contact__value">{{ cv.location }}</span>
+            </div>
+          </div>
+          <div class="contact__item">
+            <span class="contact__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </span>
+            <div>
+              <span class="contact__label">Réseaux</span>
+              <div class="contact__links">
+                @if (profile().github_url) {
+                  <a [href]="profile().github_url" target="_blank" rel="noopener">GitHub</a>
+                }
+                @if (profile().linkedin_url) {
+                  <a [href]="profile().linkedin_url" target="_blank" rel="noopener">LinkedIn</a>
+                }
+              </div>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
-  </div>
-</div>
+  </section>
+</main>

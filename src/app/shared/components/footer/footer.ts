@@ -1,32 +1,42 @@
-import { Component, signal, OnInit } from '@angular/core';
-import { ProfileService } from '../../service/ProfileService';
+import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CV } from '../../data/cv';
+import { FALLBACK_PROFILE } from '../../data/fallback';
 import { IProfile } from '../../models/IProfile';
-import { environment } from '../../../../environments/environment';
+import { ProfileService } from '../../service/ProfileService';
+import { NAV_LINKS, ScrollSpyService } from '../../service/scroll-spy.service';
 
 @Component({
   selector: 'app-footer',
-  imports: [],
   templateUrl: './footer.html',
   styleUrl: './footer.scss',
 })
 export class Footer implements OnInit {
-  profile = signal<IProfile | null>(null);
-  year = new Date().getFullYear();
+  private readonly profileService = inject(ProfileService);
+  private readonly spy = inject(ScrollSpyService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  constructor(private profileService: ProfileService) {}
+  readonly links = NAV_LINKS;
+  readonly year = new Date().getFullYear();
+  readonly profile = signal<IProfile>(FALLBACK_PROFILE);
+
+  /** URL explicite renseignée dans l'admin, sinon le CV embarqué dans le site. */
+  readonly cvUrl = computed(() => this.profile().cv_url || CV.file);
 
   ngOnInit(): void {
-    this.profileService.getProfile().subscribe({
-      next: (p) => this.profile.set(p ?? null),
-      error: () => this.profile.set(null)
-    });
+    this.profileService
+      .getProfile()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (p) => {
+          if (p) this.profile.set(p);
+        },
+        error: () => {},
+      });
   }
 
-  cvLink(): string {
-    const p = this.profile();
-    if (!p) return '#';
-    if (p.cv_url) return p.cv_url;
-    if (p.cv_file) return p.cv_file.startsWith('http') ? p.cv_file : `${environment.backendUrl}${p.cv_file}`;
-    return '#';
+  go(event: Event, id: string): void {
+    event.preventDefault();
+    this.spy.scrollTo(id);
   }
 }

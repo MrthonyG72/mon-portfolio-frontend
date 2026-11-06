@@ -1,41 +1,67 @@
-import { Component, signal, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
+import { Component, HostListener, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, map } from 'rxjs/operators';
+import { NAV_LINKS, ScrollSpyService } from '../../service/scroll-spy.service';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
-export class Header implements OnInit {
-  menuOpen = signal(false);
-  isDark = signal(false);
+export class Header {
+  private readonly spy = inject(ScrollSpyService);
+  private readonly router = inject(Router);
+  private readonly doc = inject(DOCUMENT);
 
-  private readonly DARK_KEY = 'portfolio-dark';
+  readonly links = NAV_LINKS;
+  readonly menuOpen = signal(false);
+  readonly scrolled = signal(false);
+  readonly active = this.spy.active;
 
-  ngOnInit(): void {
-    const saved = localStorage.getItem(this.DARK_KEY);
-    const dark = saved === 'true';
-    this.isDark.set(dark);
-    this.applyDark(dark);
+  /** Vrai sur la page d'accueil : le header est transparent au-dessus du hero. */
+  readonly onHome = toSignal(
+    this.router.events.pipe(
+      filter((e) => e instanceof NavigationEnd),
+      map(() => this.router.url.split(/[?#]/)[0] === '/'),
+    ),
+    { initialValue: true },
+  );
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.scrolled.set((this.doc.defaultView?.scrollY ?? 0) > 24);
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.closeMenu();
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    if ((this.doc.defaultView?.innerWidth ?? 0) > 900) this.closeMenu();
   }
 
   toggleMenu(): void {
-    this.menuOpen.update(v => !v);
+    this.menuOpen() ? this.closeMenu() : this.openMenu();
+  }
+
+  openMenu(): void {
+    this.menuOpen.set(true);
+    this.doc.body.classList.add('menu-open');
   }
 
   closeMenu(): void {
+    if (!this.menuOpen()) return;
     this.menuOpen.set(false);
+    this.doc.body.classList.remove('menu-open');
   }
 
-  toggleDark(): void {
-    const next = !this.isDark();
-    this.isDark.set(next);
-    localStorage.setItem(this.DARK_KEY, String(next));
-    this.applyDark(next);
-  }
-
-  private applyDark(dark: boolean): void {
-    document.documentElement.classList.toggle('dark-theme', dark);
+  go(event: Event, id: string): void {
+    event.preventDefault();
+    this.closeMenu();
+    this.spy.scrollTo(id);
   }
 }

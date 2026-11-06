@@ -1,4 +1,7 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { Footer } from './footer';
 
@@ -8,9 +11,9 @@ describe('Footer', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Footer]
-    })
-    .compileComponents();
+      imports: [Footer],
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Footer);
     component = fixture.componentInstance;
@@ -19,5 +22,10 @@ describe('Footer', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('affiche l’année courante', () => {
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.textContent).toContain(String(new Date().getFullYear()));
   });
 });
